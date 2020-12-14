@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title>添加联系人</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script th:src="@{/js/add.js}" ></script>
 </head>
 
 <body>
@@ -12,15 +14,17 @@
     <div class="container">
         <!-- <div class="scaleX"> -->
         <h1 style=" margin: 0; text-align: center;
-            text-shadow: 1px 1px 1px; font:verdana;font-size:26px">添加联系人<br></h1>
+            text-shadow: 1px 1px 1px;font-size:26px">添加联系人<br></h1>
         <form th:action="@{/add}" method="post">
-            <label><input type="text" placeholder="Name chester (Required)" required=true name="name"/></label>
-            <label><input type="text" placeholder="Phone 133 3333 3333" pattern=[0-9]{11} name="phone"/></label>
-            <label><input type="text" placeholder="Email xxx@xx.com" name="email"
-                          pattern="^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$"/></label>
-            <label><input type="text" placeholder="Address xxxx" name="address"/></label>
-            <label><input type="text" placeholder="qq" pattern=[0-9]* name="qq"/></label>
-            <input type="submit" value="Add" onclick="IfValid()"/>
+            <label><input id="name" placeholder="Name chester (Required)" required=true name="name"/></label>
+            <label>
+                <legend id="phoneExist">号码格式错误</legend>
+                <input id="phone" placeholder="Phone 133 3333 3333" pattern=[0-9]{11} name="phone"/></label>
+            <label><input id="email" placeholder="Email xxx@xx.com" name="email"
+                          pattern="[0-9A-Za-zd]+([-_.][0-9A-Za-zd]+)*@([0-9A-Za-zd]+[-.])+[A-Za-zd]{2,5}"/></label>
+            <label><input id="address" placeholder="Address xxxx" name="address"/></label>
+            <label><input id="QQ" type="text" placeholder="qq" pattern=[0-9]* name="qq"/></label>
+            <input type="submit" value="Add"/>
         </form>
         <!-- </div> -->
         <ul>
@@ -38,5 +42,6 @@
     </div>
 </div>
 </body>
+
 
 </html>

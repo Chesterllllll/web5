@@ -9,12 +9,12 @@ import javax.persistence.Id;
 public class AddressList {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private String phone;
-    private String email;
-    private String address;
-    private String qq;
+    public Long id;
+    public String name;
+    public String phone;
+    public String email;
+    public String address;
+    public String qq;
 
 
     public Long getId() {
@@ -41,7 +41,7 @@ public class AddressList {
         this.phone = phone;
     }
 
-    public String getPhone(String phone) {
+    public String getPhone() {
         return this.phone;
     }
 

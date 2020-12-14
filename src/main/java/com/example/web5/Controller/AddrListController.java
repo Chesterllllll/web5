@@ -3,32 +3,31 @@ package com.example.web5.Controller;
 import com.example.web5.Entity.AddressList;
 import com.example.web5.dao.AddressListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @Controller
-public class AddrListController {
+public class AddrListController extends HttpServlet {
 
-    private AddressListRepository addressListRepository;
+    public AddressListRepository addressListRepository;
 
     @Autowired
     public void setCustomerRepository(AddressListRepository addressListRepository) {
         this.addressListRepository = addressListRepository;
     }
+
 
     @GetMapping("/")
     public String index() {
@@ -55,12 +54,14 @@ public class AddrListController {
 
     @RequestMapping("/addrList")
 //联系人列表页面
-    String addrList(HttpSession session, Model model) {
-        List< AddressList> addressLists = (List<AddressList>) addressListRepository.findAll();
+    ModelAndView addrList(HttpSession session, Model model) {
+        List<AddressList> addressLists = (List<AddressList>) addressListRepository.findAll();
 //        model.addAttribute("conList", addressLists);
-        System.out.println(addressLists);
-        model.addAttribute("conList", addressLists);
-        return "addrList";
+//        System.out.println(addressLists);
+
+        ModelAndView modelAndView = new ModelAndView("addrList");
+        modelAndView.addObject("conList", addressListRepository.findAll());
+        return modelAndView;
     }
 
     //添加联系人页面
@@ -74,39 +75,41 @@ public class AddrListController {
         addressListRepository.save(addressList);
         return "redirect:/addrList";
     }
-//
-//    @GetMapping("/delete")
-//    String delete(@RequestParam int listId, Model model) {
-//        mapList.remove(listId);
-//        model.addAttribute("conList", mapList);
-//        return "redirect:/addrList";
-//    }
-//
-//    @RequestMapping("/edit")
-//    String edit(@RequestParam int listId, Model model, HttpServletRequest request) {
-//        String name = request.getParameter("name");
-//        String phone = request.getParameter("phone");
-//        String email = request.getParameter("email");
-//        String address = request.getParameter("address");
-//        String qq = request.getParameter("qq");
-//        if (name != null) {
-//            Map<String, Object> temp = new HashMap<String, Object>() {
-//                {
-//                    put("name", name);
-//                    put("phone", phone);
-//                    put("email", email);
-//                    put("address", address);
-//                    put("qq", qq);
-//                }
-//            };
-//            mapList.set(listId, temp);
-//            model.addAttribute("conList", mapList);
-//            return "redirect:/addrList";
-//        }
-//        model.addAttribute("listId", listId);
-//        model.addAttribute("ediCon", mapList.get(listId));
-//        return "editContact";
-//    }
+
+
+    @ResponseBody
+    @GetMapping("/checkphone")
+    public String isPhoneExist(@RequestParam(name = "phone") String phone) {
+        List<AddressList> addressLists = addressListRepository.findByPhone(phone);
+        return addressLists.isEmpty() ? "false" : "true";
+    }
+
+    @GetMapping("/delete")
+    String delete(@RequestParam Long listId) {
+        addressListRepository.deleteById(listId);
+        return "redirect:/addrList";
+    }
+
+    @GetMapping("/edit")
+    public String edit(@RequestParam Long listId, AddressList addressList, Model model) {
+        Optional<AddressList> addressListOptional = addressListRepository.findById(listId);
+        if (addressListOptional.isPresent()) {
+            AddressList addressList1 = addressListOptional.get();
+            model.addAttribute("ediCon", addressList1);
+            model.addAttribute("conList", addressList1);
+            return "editContact";
+        } else {
+            return "addrList";
+        }
+    }
+
+    @PostMapping("/edit")
+    String edit(AddressList addressList, @RequestParam Long listId) {
+
+        addressList.setId(listId);
+        addressListRepository.save(addressList);
+        return "redirect:/addrList";
+    }
 
     @RequestMapping("/loginout")
     public String loginOut(HttpServletRequest request) {

@@ -21,10 +21,10 @@
         <th>Email</th>
         <th>Address</th>
         <th>QQ</th>
-        <th></th>
+        <th>Operation</th>
         </thead>
 
-        <tbody th:remove="all-but-first">
+        <tbody>
         <!--        <tr>-->
         <!--&lt;!&ndash;            <td>0</td>&ndash;&gt;-->
         <!--            <td>Chester</td>-->
@@ -33,18 +33,18 @@
         <!--            <td>Beijing</td>-->
         <!--            <td>1111111</td>-->
         <!--        </tr>-->
-        <tr th:each="contact:${conList}">
+        <tr th:each="contact,stat:${conList}">
             <!--            <td th:text="${stat.index}"></td>-->
-            <td th:text="${contact.name}"></td>
-            <td th:text="${contact.phone}"></td>
-            <td th:text="${contact.email}"></td>
-            <td th:text="${contact.address}"></td>
-            <td th:text="${contact.qq}"></td>
-<!--            <td><a type="button" class="btn"-->
-<!--                   th:href="@{/edit(listId=${contact.id})}">编辑</a>-->
-<!--                <a type="button" class="btn"-->
-<!--                   th:href="@{/delete(listId=${contact.id})}">删除</a>-->
-<!--            </td>-->
+            <td><span th:text="${contact.name}">  </span></td>
+            <td><span th:text="${contact.phone}"> </span></td>
+            <td><span th:text="${contact.email}">  </span></td>
+            <td><span th:text="${contact.address}">  </span></td>
+            <td><span th:text="${contact.qq}">  </span></td>
+            <td><a type="button" class="btn"
+                   th:href="@{/edit(listId=${contact.id})}">编辑</a>
+                <a type="button" class="btn"
+                   th:href="@{/delete(listId=${contact.id})}">删除</a>
+                <!--            </td>-->
         </tr>
         </tbody>
     </table>
