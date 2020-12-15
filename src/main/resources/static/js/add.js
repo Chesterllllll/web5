@@ -18,6 +18,12 @@ $(document).ready(function () {
                                 .css('color', 'orange')
                                 .text("号码已存在");
                         }
+                        else
+                        {
+                            $("#phoneExist")
+                                .css('display', 'none')
+                                .css('color', 'orange')
+                        }
                     },
                     error:function (){
                         alert("error!!!!")
@@ -25,12 +31,4 @@ $(document).ready(function () {
                 })
             })
         })
-        .blur(function () {
-            let obj = $("#phoneExist")
-            const number = $("#phoneNumber").val();
-            if (obj.text() === "号码尚不存在" || number === '' || number === null) {
-                obj.css('display', 'none');
-                $(this).css('border', 'none');
-            }
-        });
 });
